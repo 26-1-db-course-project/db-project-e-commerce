@@ -1,0 +1,79 @@
+# =================================================================
+# OS Specific
+# =================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# =================================================================
+# IDE Specific (IntelliJ, VS Code)
+# =================================================================
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
+.vscode/
+!.vscode/extensions.json
+.history/
+
+# =================================================================
+# Java & Spring Boot (Gradle 기준)
+# =================================================================
+build/
+.gradle/
+/build.log
+/out/
+bin/
+*.jar
+*.war
+*.log
+.gradletasknamecache
+
+# =================================================================
+# Frontend
+# =================================================================
+node_modules/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# =================================================================
+# Database & Security
+# =================================================================
+# MySQL 로그 및 덤프 파일
+*.sql
+*.sql.gz
+
+!/db/*.sql
+!src/main/resources/data.sql
+!src/main/resources/schema.sql
+!backend/src/main/resources/data.sql
+!backend/src/main/resources/schema.sql
+
+# 민감한 설정 파일 (프로젝트 구조에 맞춰 파일명 확인 필요)
+src/main/resources/application-local.yml
+src/main/resources/application-secret.yml
+src/main/resources/secrets.yml
+backend/src/main/resources/application-local.yml
+backend/src/main/resources/application-secret.yml
+
+# =================================================================
+# Etc
+# =================================================================
+temp/
+/code
