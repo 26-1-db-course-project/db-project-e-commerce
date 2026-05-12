@@ -1,0 +1,1 @@
+INSERT INTO member_conn_test (nickname) VALUES ('testnick');
