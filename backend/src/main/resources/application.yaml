@@ -1,3 +1,18 @@
 spring:
+  profiles:
+    active: local
   application:
     name: backend
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      show_sql: true
+      format_sql: true
+      highlight_sql: true
