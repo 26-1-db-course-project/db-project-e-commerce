@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS review_report;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS cart_item;
 DROP TABLE IF EXISTS cart;
+DROP TABLE IF EXISTS order_status;
 DROP TABLE IF EXISTS order_item;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS product_option;
@@ -90,15 +91,15 @@ CREATE TABLE order_status
 -- 옵션 종류
 CREATE TABLE option_type
 (
-    option_type_id   INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    option_type_id   BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     option_type_name VARCHAR(30) NOT NULL
 );
 
 -- 옵션 상세
 CREATE TABLE option_detail
 (
-    option_detail_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_id   INT,
+    option_detail_id BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    option_type_id   BIGINT,
     option_value     VARCHAR(30) NOT NULL,
 
     FOREIGN KEY (option_type_id)
@@ -109,7 +110,7 @@ CREATE TABLE option_detail
 -- 제조업체 테이블
 CREATE TABLE manufacturer
 (
-    manufacturer_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    manufacturer_id BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     company_name    VARCHAR(50) NOT NULL,
     owner           VARCHAR(40)
 );
@@ -117,18 +118,18 @@ CREATE TABLE manufacturer
 -- 카테고리 테이블
 CREATE TABLE category
 (
-    category_id   INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    category_id   BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(50) NOT NULL
 );
 
 -- 상품 테이블
 CREATE TABLE product
 (
-    product_id      INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    manufacturer_id INT         NOT NULL,
+    product_id      BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    manufacturer_id BIGINT      NOT NULL,
     product_name    VARCHAR(50) NOT NULL,
-    price           INT         NOT NULL,
-    category_id     INT         NOT NULL,
+    price           BIGINT      NOT NULL,
+    category_id     BIGINT      NOT NULL,
     image_url       VARCHAR(100),
 
     CONSTRAINT check_price CHECK (price >= 0),
@@ -148,7 +149,7 @@ CREATE INDEX idx_product_price ON product (price);
 CREATE TABLE product_detail
 (
     product_detail_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    product_id        INT    NOT NULL,
+    product_id        BIGINT NOT NULL,
     stock_quantity    BIGINT NOT NULL,
     surcharge         BIGINT NOT NULL DEFAULT 0,
     sales             BIGINT NOT NULL DEFAULT 0,
@@ -167,7 +168,7 @@ CREATE TABLE product_detail
 CREATE TABLE product_option
 (
     product_detail_id BIGINT NOT NULL,
-    option_detail_id  INT    NOT NULL,
+    option_detail_id  BIGINT NOT NULL,
 
     UNIQUE (product_detail_id, option_detail_id),
 
@@ -203,7 +204,7 @@ CREATE TABLE order_item
 (
     order_item_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     order_id      BIGINT NOT NULL,
-    product_id    INT    NOT NULL,
+    product_id    BIGINT NOT NULL,
     status_id     BIGINT NOT NULL,
     quantity      BIGINT NOT NULL DEFAULT 1,
     order_price   BIGINT NOT NULL,
@@ -253,7 +254,7 @@ CREATE TABLE review
 (
     review_id      BIGINT        NOT NULL AUTO_INCREMENT,
     member_id      BIGINT        NOT NULL,
-    product_id     INT           NOT NULL,
+    product_id     BIGINT        NOT NULL,
 
     rating         INT           NOT NULL
         CHECK (rating BETWEEN 1 AND 5),
