@@ -1,3 +1,26 @@
+-- DROP TABLE IF EXISTS member_conn_test;
+--
+-- CREATE TABLE member_conn_test (
+--     member_id INT AUTO_INCREMENT PRIMARY KEY,
+--     nickname VARCHAR(50) NOT NULL
+-- );
+
+-- 회원
+DROP TABLE IF EXISTS member;
+CREATE TABLE member (
+                        member_id     BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        login_id      VARCHAR(50)   NOT NULL UNIQUE, -- 기존의 문자열 ID 역할을 할 로그인용 아이디
+                        password      VARCHAR(255)  NOT NULL,
+                        email         VARCHAR(100)  NOT NULL,
+                        phone_number  VARCHAR(20)   NOT NULL,
+                        status_name   VARCHAR(20)   NOT NULL,
+                        grade_name    VARCHAR(20)   NOT NULL,
+                        FOREIGN KEY (status_name) REFERENCES activity_status(status_name)
+                            ON UPDATE CASCADE
+                            ON DELETE RESTRICT,
+                        FOREIGN KEY (grade_name) REFERENCES member_grade(grade_name)
+                            ON UPDATE CASCADE
+                            ON DELETE RESTRICT
 -- [주문상태] 테이블
 DROP TABLE IF EXISTS order_status;
 
@@ -65,84 +88,49 @@ CREATE TABLE manufacturer (
     owner VARCHAR(40)
 );
 
---[카테고리]
-CREATE TABLE category(
-    category_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    category_name VARCHAR(50) NOT NULL
+-- 고객 회원
+DROP TABLE IF EXISTS customer;
+CREATE TABLE customer (
+                          member_id  BIGINT      NOT NULL PRIMARY KEY,
+                          FOREIGN KEY (member_id) REFERENCES member(member_id)
+                              ON UPDATE CASCADE
+                              ON DELETE RESTRICT
 );
 
---[상품]
-CREATE TABLE product (
-    product_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    manufacturer_id BIGINT,
-    product_name VARCHAR(50) NOT NULL,
-    price BIGINT NOT NULL,
-    category_id BIGINT NOT NULL,
-    image_url VARCHAR(100),
-
-    CONSTRAINT check_price CHECK(price >= 0),
-
-    FOREIGN KEY (manufacturer_id)
-        REFERENCES manufacturer(manufacturer_id)
-        ON DELETE SET NULL,
-    FOREIGN KEY (category_id)
-        REFERENCES category(category_id)
-        ON DELETE RESTRICT
+-- 업체 회원
+DROP TABLE IF EXISTS business;
+CREATE TABLE business (
+                          member_id  BIGINT      NOT NULL PRIMARY KEY,
+                          FOREIGN KEY (member_id) REFERENCES member(member_id)
+                              ON UPDATE CASCADE
+                              ON DELETE RESTRICT
 );
 
-CREATE INDEX idx_product_name ON product(product_name);
-CREATE INDEX idx_product_price ON product(price);
-
---[상품상세]
-CREATE TABLE product_detail (
-    product_detail_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    product_id BIGINT NOT NULL,
-    stock_quantity BIGINT NOT NULL,
-    surcharge BIGINT NOT NULL DEFAULT 0,
-    sales BIGINT NOT NULL DEFAULT 0,
-    image_url VARCHAR(100),
-
-    CONSTRAINT check_stock_quantity CHECK(stock_quantity >= 0),
-    CONSTRAINT check_surcharge CHECK(surcharge >= 0),
-    CONSTRAINT check_sales CHECK(sales >= 0),
-
-    FOREIGN KEY (product_id)
-        REFERENCES product(product_id)
-        ON DELETE CASCADE
+-- 배송주소
+DROP TABLE IF EXISTS delivery_address;
+CREATE TABLE delivery_address (
+                                  address_id       BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                  member_id        BIGINT       NOT NULL,
+                                  city             VARCHAR(50)  NOT NULL,
+                                  district         VARCHAR(50)  NOT NULL,
+                                  detail_address   VARCHAR(255) NOT NULL,
+                                  FOREIGN KEY (member_id) REFERENCES member(member_id)
+                                      ON UPDATE CASCADE
+                                      ON DELETE RESTRICT
 );
 
-CREATE INDEX idx_product_id ON product_detail(product_id);
+-- 활동 상태
+DROP TABLE IF EXISTS activity_status;
+CREATE TABLE activity_status (
+                                 activity_status_id  BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                 status_name         VARCHAR(20) NOT NULL UNIQUE,  -- 'active' | 'suspended' | 'withdrawn'
+                                 report_count        INT         NOT NULL DEFAULT 0
+)
 
---[옵션 종류 (예: 사이즈, 색상)]
-CREATE TABLE option_type (
-    option_type_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_name VARCHAR(30) NOT NULL
-);
-
---[옵션 상세 (예: S, M, L / 빨강, 파랑]
-CREATE TABLE option_detail (
-    option_detail_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_id BIGINT,
-    option_value VARCHAR(30) NOT NULL,
-
-    FOREIGN KEY (option_type_id)
-        REFERENCES option_type(option_type_id)
-        ON DELETE RESTRICT
-);
-
---[상품옵션 조합 테이블 (복합키 매핑)]
-CREATE TABLE product_option (
-    product_detail_id BIGINT NOT NULL,
-    option_detail_id BIGINT NOT NULL,
-
-    UNIQUE(product_detail_id, option_detail_id),
-
-    FOREIGN KEY (product_detail_id)
-        REFERENCES product_detail(product_detail_id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (option_detail_id)
-        REFERENCES option_detail(option_detail_id)
-        ON DELETE RESTRICT,
-
-    PRIMARY KEY (product_detail_id, option_detail_id)
+-- 회원 등급
+DROP TABLE IF EXISTS member_grade;
+CREATE TABLE member_grade (
+                              grade_id              BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                              grade_name            VARCHAR(20)    NOT NULL UNIQUE,  -- 'welcome' | 'silver' | 'gold'
+                              total_purchase_amount DECIMAL(15,2)  NOT NULL DEFAULT 0
 );
