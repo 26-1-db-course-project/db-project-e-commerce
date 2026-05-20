@@ -8,8 +8,7 @@
 -- 회원
 DROP TABLE IF EXISTS member;
 CREATE TABLE member (
-                        member_id     BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        login_id      VARCHAR(50)   NOT NULL UNIQUE, -- 기존의 문자열 ID 역할을 할 로그인용 아이디
+                        member_id     BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY, -- 로그인할 때도 member_id를 사용할 예정
                         password      VARCHAR(255)  NOT NULL,
                         email         VARCHAR(100)  NOT NULL,
                         phone_number  VARCHAR(20)   NOT NULL,
