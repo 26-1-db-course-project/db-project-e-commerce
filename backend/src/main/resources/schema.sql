@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS product_option;
 DROP TABLE IF EXISTS product_detail;
 DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS cart_item;
+DROP TABLE IF EXISTS cart;
 DROP TABLE IF EXISTS delivery_address;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS business;
@@ -16,7 +18,6 @@ DROP TABLE IF EXISTS manufacturer;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS option_detail;
 DROP TABLE IF EXISTS option_type;
-
 
 -- [활동 상태] 테이블
 CREATE TABLE activity_status
@@ -81,6 +82,16 @@ CREATE TABLE business
     FOREIGN KEY (member_id) REFERENCES member (member_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
+);
+
+-- [장바구니] 테이블
+CREATE TABLE cart
+(
+    member_id BIGINT NOT NULL PRIMARY KEY,
+
+    FOREIGN KEY (member_id)
+        REFERENCES member (member_id)
+        ON DELETE CASCADE
 );
 
 -- [주문상태] 테이블
@@ -220,6 +231,26 @@ CREATE TABLE product_option
 
     PRIMARY KEY (product_detail_id, option_detail_id)
 );
+
+-- [장바구니 아이템] 테이블
+CREATE TABLE cart_item
+(
+    cart_item_id      BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    member_id         BIGINT NOT NULL,
+    product_detail_id BIGINT NOT NULL,
+    quantity          BIGINT NOT NULL DEFAULT 1,
+
+    CONSTRAINT check_cart_quantity CHECK (quantity >= 1),
+    UNIQUE (member_id, product_detail_id),
+
+    FOREIGN KEY (member_id)
+        REFERENCES cart (member_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (product_detail_id)
+        REFERENCES product_detail (product_detail_id)
+        ON DELETE CASCADE
+);
+
 
 -- [리뷰] 테이블
 CREATE TABLE review
