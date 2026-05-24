@@ -4,10 +4,10 @@ VALUES ('ACTIVE'),
        ('DELETED');
 
 -- [회원 등급 초기 데이터]
-INSERT INTO member_grade (grade_name)
-VALUES ('WELCOME'),
-       ('SILVER'),
-       ('GOLD');
+INSERT INTO member_grade (grade_name, shipping_fee)
+VALUES ('WELCOME', 3000),
+       ('SILVER', 1000),
+       ('GOLD', 0);
 
 -- [회원 더미 데이터]
 INSERT INTO member (member_id, password, email, phone_number, total_purchase_amount, report_count, grade_name,
