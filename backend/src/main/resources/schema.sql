@@ -1,3 +1,11 @@
+-- DROP TABLE IF EXISTS member_conn_test;
+--
+-- CREATE TABLE member_conn_test (
+--     member_id INT AUTO_INCREMENT PRIMARY KEY,
+--     nickname VARCHAR(50) NOT NULL
+-- );
+
+-- [주문상태] 테이블
 DROP TABLE IF EXISTS review_report;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS order_item;
@@ -32,7 +40,8 @@ CREATE TABLE member_grade
 (
     grade_id              BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     grade_name            VARCHAR(20)    NOT NULL UNIQUE, -- 'welcome' | 'silver' | 'gold'
-    total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0
+    total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    shipping_fee          INT           NOT NULL DEFAULT 0
 );
 
 -- [사용자] 테이블
@@ -45,6 +54,8 @@ CREATE TABLE member
     phone_number VARCHAR(20)  NOT NULL,
     status_name  VARCHAR(20)  NOT NULL,
     grade_name   VARCHAR(20)  NOT NULL,
+    total_purchase_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
+    report_count          INT           NOT NULL DEFAULT 0,
     FOREIGN KEY (status_name) REFERENCES activity_status (status_name)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
