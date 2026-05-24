@@ -5,21 +5,6 @@
 --     nickname VARCHAR(50) NOT NULL
 -- );
 
--- 회원
-DROP TABLE IF EXISTS member;
-CREATE TABLE member (
-                        member_id     BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY, -- 로그인할 때도 member_id를 사용할 예정
-                        password      VARCHAR(255)  NOT NULL,
-                        email         VARCHAR(100)  NOT NULL,
-                        phone_number  VARCHAR(20)   NOT NULL,
-                        status_name   VARCHAR(20)   NOT NULL,
-                        grade_name    VARCHAR(20)   NOT NULL,
-                        FOREIGN KEY (status_name) REFERENCES activity_status(status_name)
-                            ON UPDATE CASCADE
-                            ON DELETE RESTRICT,
-                        FOREIGN KEY (grade_name) REFERENCES member_grade(grade_name)
-                            ON UPDATE CASCADE
-                            ON DELETE RESTRICT
 -- [주문상태] 테이블
 DROP TABLE IF EXISTS review_report;
 DROP TABLE IF EXISTS review;
@@ -54,7 +39,8 @@ CREATE TABLE member_grade
 (
     grade_id              BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     grade_name            VARCHAR(20)    NOT NULL UNIQUE, -- 'welcome' | 'silver' | 'gold'
-    total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0
+    total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    shipping_fee          INT           NOT NULL DEFAULT 0
 );
 
 -- [사용자] 테이블
@@ -67,6 +53,8 @@ CREATE TABLE member
     phone_number VARCHAR(20)  NOT NULL,
     status_name  VARCHAR(20)  NOT NULL,
     grade_name   VARCHAR(20)  NOT NULL,
+    total_purchase_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
+    report_count          INT           NOT NULL DEFAULT 0,
     FOREIGN KEY (status_name) REFERENCES activity_status (status_name)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
