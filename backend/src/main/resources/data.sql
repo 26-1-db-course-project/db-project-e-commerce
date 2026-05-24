@@ -10,13 +10,12 @@ VALUES ('WELCOME', 3000),
        ('GOLD', 0);
 
 -- [회원 더미 데이터]
-INSERT INTO member (member_id, password, email, phone_number, total_purchase_amount, report_count, grade_name,
-                    status_name)
-VALUES ('1', '1234', 'kim123@gmail.com', '010-1234-5678', 120000, 0, 'GOLD', 'ACTIVE'),
-       ('2', '2345', 'lee456@naver.com', '010-2345-6789', 60000, 1, 'SILVER', 'ACTIVE'),
-       ('3', '3456', 'park789@daum.net', '010-3456-7890', 30000, 3, 'WELCOME', 'SUSPENDED'),
-       ('4', '4567', 'choi001@gmail.com', '010-4567-8901', 200000, 0, 'GOLD', 'ACTIVE'),
-       ('5', '5678', 'jung002@naver.com', '010-5678-9012', 0, 0, 'WELCOME', 'DELETED');
+INSERT INTO member (login_id, password, email, phone_number, grade_name, status_name)
+VALUES ('kim123', '1234', 'kim123@gmail.com', '010-1234-5678', 'GOLD', 'ACTIVE'),
+       ('lee456', '2345', 'lee456@naver.com', '010-2345-6789', 'SILVER', 'ACTIVE'),
+       ('park789', '3456', 'park789@daum.net', '010-3456-7890', 'WELCOME', 'SUSPENDED'),
+       ('choi001', '4567', 'choi001@gmail.com', '010-4567-8901', 'GOLD', 'ACTIVE'),
+       ('jung002', '5678', 'jung002@naver.com', '010-5678-9012', 'WELCOME', 'DELETED');
 
 -- [배송지 더미 데이터]
 INSERT INTO delivery_address (member_id, city, district, detail_address)
