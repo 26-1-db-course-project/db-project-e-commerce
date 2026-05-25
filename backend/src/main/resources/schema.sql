@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS option_type;
 CREATE TABLE activity_status
 (
     activity_status_id BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    status_name        VARCHAR(20) NOT NULL UNIQUE, -- 'active' | 'suspended' | 'withdrawn'
+    status_name        VARCHAR(20) NOT NULL UNIQUE, 
     report_count       INT         NOT NULL DEFAULT 0
 );
 
@@ -31,9 +31,9 @@ CREATE TABLE activity_status
 CREATE TABLE member_grade
 (
     grade_id              BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    grade_name            VARCHAR(20)    NOT NULL UNIQUE, -- 'welcome' | 'silver' | 'gold'
+    grade_name            VARCHAR(20)    NOT NULL UNIQUE, 
     total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    shipping_fee          INT            NOT NULL DEFAULT 0
+    shipping_fee          INT           NOT NULL DEFAULT 0 
 );
 
 -- [사용자] 테이블
