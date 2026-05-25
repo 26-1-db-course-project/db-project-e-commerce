@@ -375,12 +375,12 @@ INSERT INTO product_option (product_detail_id, option_detail_id)
 VALUES (40, 10);
 
 -- [장바구니] 더미 데이터
-INSERT INTO cart (cart_id, member_id)
-VALUES (1, 1),
-       (2, 2),
-       (3, 3),
-       (4, 4),
-       (5, 5);
+INSERT INTO cart (member_id)
+VALUES (1),
+       (2),
+       (3),
+       (4),
+       (5);
 
 -- [장바구니 아이템] 더미 데이터
 INSERT INTO cart_item (member_id, product_detail_id, quantity) VALUES
