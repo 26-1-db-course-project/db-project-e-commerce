@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS option_type;
 CREATE TABLE activity_status
 (
     activity_status_id BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    status_name        VARCHAR(20) NOT NULL UNIQUE, 
+    status_name        VARCHAR(20) NOT NULL UNIQUE, -- 'active' | 'suspended' | 'withdrawn'
     report_count       INT         NOT NULL DEFAULT 0
 );
 
@@ -31,9 +31,9 @@ CREATE TABLE activity_status
 CREATE TABLE member_grade
 (
     grade_id              BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    grade_name            VARCHAR(20)    NOT NULL UNIQUE, 
+    grade_name            VARCHAR(20)    NOT NULL UNIQUE,
     total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    shipping_fee          INT           NOT NULL DEFAULT 0 
+    shipping_fee          INT           NOT NULL DEFAULT 0
 );
 
 -- [사용자] 테이블
@@ -204,15 +204,22 @@ CREATE TABLE order_item
 CREATE TABLE option_type
 (
     option_type_id   BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_name VARCHAR(30) NOT NULL
+    option_type_name VARCHAR(30) NOT NULL,
+
+    CONSTRAINT unique_option_type_name UNIQUE (option_type_name),
+    CONSTRAINT check_option_type_name CHECK (option_type_name <> '')
 );
 
 --[옵션 상세 (예: S, M, L / 빨강, 파랑]
 CREATE TABLE option_detail
 (
     option_detail_id BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_id   BIGINT,
+    option_type_id   BIGINT      NOT NULL,
     option_value     VARCHAR(30) NOT NULL,
+
+    UNIQUE (option_type_id, option_value),
+
+    CONSTRAINT check_option_value CHECK (option_value <> ''),
 
     FOREIGN KEY (option_type_id)
         REFERENCES option_type (option_type_id)
@@ -254,25 +261,25 @@ CREATE TABLE cart_item
         ON DELETE CASCADE
 );
 
+
 -- [리뷰] 테이블
 CREATE TABLE review
 (
     review_id      BIGINT        NOT NULL AUTO_INCREMENT,
     member_id      BIGINT        NOT NULL,
     product_id     BIGINT        NOT NULL,
+    report_count   INT                 DEFAULT 0,
 
     rating         INT           NOT NULL
         CHECK (rating BETWEEN 1 AND 5),
 
     review_content VARCHAR(1000) NOT NULL,
 
-    created_at     DATETIME      NOT NULL
-        DEFAULT CURRENT_TIMESTAMP,
+    created_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     updated_at     DATETIME NULL,
 
-    review_status  VARCHAR(20)   NOT NULL
-        DEFAULT 'NORMAL',
+    review_status  VARCHAR(20)   NOT NULL DEFAULT 'NORMAL',
 
     PRIMARY KEY (review_id),
 
