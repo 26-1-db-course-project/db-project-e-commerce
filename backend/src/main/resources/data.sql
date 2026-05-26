@@ -1,3 +1,31 @@
+INSERT INTO activity_status (status_name)
+VALUES ('ACTIVE'),
+       ('SUSPENDED'),
+       ('DELETED');
+
+-- [회원 등급 초기 데이터]
+INSERT INTO member_grade (grade_name, shipping_fee)
+VALUES ('WELCOME', 3000),
+       ('SILVER', 1000),
+       ('GOLD', 0);
+
+-- [회원 더미 데이터]
+INSERT INTO member (login_id, password, email, phone_number, grade_name, status_name)
+VALUES ('kim123', '1234', 'kim123@gmail.com', '010-1234-5678', 'GOLD', 'ACTIVE'),
+       ('lee456', '2345', 'lee456@naver.com', '010-2345-6789', 'SILVER', 'ACTIVE'),
+       ('park789', '3456', 'park789@daum.net', '010-3456-7890', 'WELCOME', 'SUSPENDED'),
+       ('choi001', '4567', 'choi001@gmail.com', '010-4567-8901', 'GOLD', 'ACTIVE'),
+       ('jung002', '5678', 'jung002@naver.com', '010-5678-9012', 'WELCOME', 'DELETED');
+
+-- [배송지 더미 데이터]
+INSERT INTO delivery_address (member_id, city, district, detail_address)
+VALUES ('1', '서울', '강남구', '테헤란로 123 101호'),
+       ('1', '서울', '송파구', '올림픽로 456 202호'),
+       ('2', '부산', '해운대구', '해운대로 789 303호'),
+       ('4', '서울', '마포구', '홍익로 321 404호'),
+       ('4', '인천', '연수구', '송도대로 654 505호');
+
+
 -- [주문상태] 데이터
 INSERT INTO order_status (status_name)
 VALUES ('주문접수'),
@@ -5,50 +33,6 @@ VALUES ('주문접수'),
        ('배송중'),
        ('배송완료'),
        ('주문취소');
-
-
--- -- [주문] 더미 데이터 (총 8개의 주문)
--- -- 시간은 DATETIME(6) 포맷에 맞추고, member_id는 1~5번 회원이 주문했다고 가정했습니다.
--- INSERT INTO orders (member_id, order_date, shipping_address, total_price)
--- VALUES (1, '2026-05-10 10:30:00.000000', '서울특별시 강남구 테헤란로 123', 50000),    -- 주문 1
---        (2, '2026-05-12 14:15:22.000000', '서울특별시 송파구 올림픽로 456', 120000),   -- 주문 2
---        (1, '2026-05-14 09:00:11.000000', '서울특별시 강남구 테헤란로 123', 30000),    -- 주문 3
---        (3, '2026-05-15 18:45:50.000000', '경기도 성남시 분당구 판교역로 789', 200000), -- 주문 4
---        (4, '2026-05-16 22:10:05.000000', '부산광역시 해운대구 센텀중앙로 12', 15000),   -- 주문 5
---        (5, '2026-05-18 11:20:30.000000', '대구광역시 중구 동성로 34', 80000),       -- 주문 6
---        (2, '2026-05-19 16:05:45.000000', '서울특별시 송파구 올림픽로 456', 45000),    -- 주문 7
---        (1, '2026-05-20 08:30:00.000000', '서울특별시 서대문구 이화여대길 52', 350000);
--- -- 주문 8
---
--- -- 3. [주문목록] 더미 데이터 (총 10개의 주문 상품)
--- -- 총결제금액(quantity * order_price)이 위 orders 테이블의 total_price와 정확히 일치하도록 논리적으로 짰습니다.
--- INSERT INTO order_item (order_id, product_id, status_id, quantity, order_price)
--- VALUES
--- -- 1번 주문 (총 50,000원 = 25,000 * 2개) - 배송완료(5)
--- (1, 1, 5, 2, 25000),
---
--- -- 2번 주문 (총 120,000원 = 100,000*1 + 20,000*1) - 배송완료(5)
--- (2, 2, 5, 1, 100000),
--- (2, 3, 5, 1, 20000),
---
--- -- 3번 주문 (총 30,000원 = 30,000 * 1개) - 취소/환불(6)
--- (3, 4, 6, 1, 30000),
---
--- -- 4번 주문 (총 200,000원 = 50,000 * 4개) - 배송중(4)
--- (4, 5, 4, 4, 50000),
---
--- -- 5번 주문 (총 15,000원 = 15,000 * 1개) - 배송준비중(3)
--- (5, 6, 3, 1, 15000),
---
--- -- 6번 주문 (총 80,000원 = 40,000 * 2개) - 배송준비중(3)
--- (6, 7, 3, 2, 40000),
---
--- -- 7번 주문 (총 45,000원 = 15,000 * 3개) - 결제완료(2)
--- (7, 8, 2, 3, 15000),
---
--- -- 8번 주문 (총 350,000원 = 300,000*1 + 50,000*1) - 결제대기(1)
--- (8, 9, 1, 1, 300000),
--- (8, 10, 1, 1, 50000);
 
 -- [제조업체]
 INSERT INTO manufacturer (manufacturer_id, company_name, owner)
@@ -220,93 +204,244 @@ VALUES (40, 10, 35, 0, 25, 'http://img/adidas-jogger-gray-xl');
 
 -- [상품옵션 조합]
 -- 트위드 자켓: pd1(S/화이트), pd2(M/화이트), pd3(M/블랙), pd4(L/블랙)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (1, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (1, 6);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (2, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (2, 6);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (3, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (3, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (4, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (4, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (1, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (1, 6);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (2, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (2, 6);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (3, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (3, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (4, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (4, 7);
 -- 플리츠 미디 스커트: pd5(S/베이지), pd6(M/베이지), pd7(M/블랙), pd8(L/네이비)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (5, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (5, 9);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (6, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (6, 9);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (7, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (7, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (8, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (8, 8);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (5, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (5, 9);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (6, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (6, 9);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (7, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (7, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (8, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (8, 8);
 -- 리넨 블라우스: pd9(S/화이트), pd10(M/화이트), pd11(M/네이비), pd12(L/베이지)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (9, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (9, 6);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (10, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (10, 6);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (11, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (11, 8);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (12, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (12, 9);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (9, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (9, 6);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (10, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (10, 6);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (11, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (11, 8);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (12, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (12, 9);
 -- 오버사이즈 티셔츠: pd13(S/화이트), pd14(M/그레이), pd15(L/블랙), pd16(XL/그레이)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (13, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (13, 6);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (14, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (14, 10);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (15, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (15, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (16, 5);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (16, 10);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (13, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (13, 6);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (14, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (14, 10);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (15, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (15, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (16, 5);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (16, 10);
 -- 슬림핏 청바지: pd17(S/블랙), pd18(M/블랙), pd19(M/네이비), pd20(L/네이비)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (17, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (17, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (18, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (18, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (19, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (19, 8);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (20, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (20, 8);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (17, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (17, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (18, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (18, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (19, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (19, 8);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (20, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (20, 8);
 -- 히트텍 롱슬리브: pd21(S/화이트), pd22(M/화이트), pd23(M/블랙), pd24(L/그레이)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (21, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (21, 6);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (22, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (22, 6);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (23, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (23, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (24, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (24, 10);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (21, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (21, 6);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (22, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (22, 6);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (23, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (23, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (24, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (24, 10);
 -- 후리스 집업: pd25(S/그레이), pd26(M/그레이), pd27(L/네이비), pd28(XL/네이비)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (25, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (25, 10);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (26, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (26, 10);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (27, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (27, 8);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (28, 5);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (28, 8);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (25, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (25, 10);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (26, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (26, 10);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (27, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (27, 8);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (28, 5);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (28, 8);
 -- 드라이핏 반팔: pd29(S/블랙), pd30(M/블랙), pd31(L/그레이), pd32(XL/그레이)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (29, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (29, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (30, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (30, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (31, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (31, 10);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (32, 5);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (32, 10);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (29, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (29, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (30, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (30, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (31, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (31, 10);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (32, 5);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (32, 10);
 -- 트랙 재킷: pd33(S/블랙), pd34(M/블랙), pd35(M/네이비), pd36(L/네이비)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (33, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (33, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (34, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (34, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (35, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (35, 8);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (36, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (36, 8);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (33, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (33, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (34, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (34, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (35, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (35, 8);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (36, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (36, 8);
 -- 조거 팬츠: pd37(S/블랙), pd38(M/블랙), pd39(L/블랙), pd40(XL/그레이)
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (37, 2);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (37, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (38, 3);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (38, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (39, 4);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (39, 7);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (40, 5);
-INSERT INTO product_option (product_detail_id, option_detail_id) VALUES (40, 10);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (37, 2);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (37, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (38, 3);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (38, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (39, 4);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (39, 7);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (40, 5);
+INSERT INTO product_option (product_detail_id, option_detail_id)
+VALUES (40, 10);
 
+-- [장바구니] 더미 데이터
+INSERT INTO cart (member_id)
+VALUES (1),
+       (2),
+       (3),
+       (4),
+       (5);
+
+-- [장바구니 아이템] 더미 데이터
+INSERT INTO cart_item (member_id, product_detail_id, quantity) VALUES
+-- 1번 회원
+(1, 1, 1),
+(1, 3, 2),
+(1, 14, 1),
+(1, 21, 3),
+
+-- 2번 회원
+(2, 5, 1),
+(2, 6, 1),
+(2, 17, 2),
+(2, 25, 1),
+(2, 37, 1),
+
+-- 3번 회원
+(3, 9, 1),
+(3, 10, 1),
+(3, 23, 2),
+
+-- 4번 회원
+(4, 2, 1),
+(4, 13, 2),
+(4, 29, 1),
+(4, 33, 1),
+(4, 38, 1),
+
+-- 5번 회원
+(5, 11, 1),
+(5, 18, 1),
+(5, 31, 2);
+
+-- [주문] 더미 데이터
+INSERT INTO orders (member_id, order_date, shipping_address, total_price)
+VALUES (1, '2026-05-10 10:30:00', '서울 강남구 테헤란로 123 101호', 239000),  -- 1번 주문
+       (2, '2026-05-12 14:15:22', '부산 해운대구 해운대로 789 303호', 109700), -- 2번 주문
+       (1, '2026-05-15 09:00:11', '서울 송파구 올림픽로 456 202호', 59700),   -- 3번 주문
+       (4, '2026-05-18 18:45:50', '서울 마포구 홍익로 321 404호', 248000),   -- 4번 주문
+       (2, '2026-05-20 11:20:30', '부산 해운대구 해운대로 789 303호', 124900);
+-- 5번 주문
+
+-- [주문목록] 더미 데이터
+INSERT INTO order_item (order_id, product_id, status_id, quantity, order_price)
+VALUES
+-- 1번 주문: 트위드 자켓(150,000) 1개 + 플리츠 스커트(89,000) 1개 = 총 239,000원(배송완료)
+(1, 1, 4, 1, 150000),
+(1, 2, 4, 1, 89000),
+
+-- 2번 주문: 오버사이즈 티셔츠(29,900) 2개 + 슬림핏 청바지(49,900) 1개 = 총 109,700원(배송중)
+(2, 4, 3, 2, 29900),
+(2, 5, 3, 1, 49900),
+
+-- 3번 주문: 히트텍 롱슬리브(19,900) 3개 = 총 59,700원(주문취소)
+(3, 6, 5, 3, 19900),
+
+-- 4번 주문: 드라이핏 반팔(45,000) 2개 + 트랙 재킷(89,000) 1개 + 조거 팬츠(69,000) 1개 = 총 248,000원(결제완료)
+(4, 8, 2, 2, 45000),
+(4, 9, 2, 1, 89000),
+(4, 10, 2, 1, 69000),
+
+-- 5번 주문: 리넨 블라우스(65,000) 1개 + 후리스 집업(59,900) 1개 = 총 124,900원(주문접수)
+(5, 3, 1, 1, 65000),
+(5, 7, 1, 1, 59900);

@@ -1,11 +1,3 @@
--- DROP TABLE IF EXISTS member_conn_test;
---
--- CREATE TABLE member_conn_test (
---     member_id INT AUTO_INCREMENT PRIMARY KEY,
---     nickname VARCHAR(50) NOT NULL
--- );
-
--- [주문상태] 테이블
 DROP TABLE IF EXISTS review_report;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS order_item;
@@ -47,15 +39,15 @@ CREATE TABLE member_grade
 -- [사용자] 테이블
 CREATE TABLE member
 (
-    member_id    BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    login_id     VARCHAR(50)  NOT NULL UNIQUE, -- 기존의 문자열 ID 역할을 할 로그인용 아이디
-    password     VARCHAR(255) NOT NULL,
-    email        VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(20)  NOT NULL,
-    status_name  VARCHAR(20)  NOT NULL,
-    grade_name   VARCHAR(20)  NOT NULL,
-    total_purchase_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
-    report_count          INT           NOT NULL DEFAULT 0,
+    member_id             BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    login_id              VARCHAR(50)    NOT NULL UNIQUE, -- 기존의 문자열 ID 역할을 할 로그인용 아이디
+    password              VARCHAR(255)   NOT NULL,
+    email                 VARCHAR(100)   NOT NULL,
+    phone_number          VARCHAR(20)    NOT NULL,
+    status_name           VARCHAR(20)    NOT NULL,
+    grade_name            VARCHAR(20)    NOT NULL,
+    total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    report_count          INT            NOT NULL DEFAULT 0,
     FOREIGN KEY (status_name) REFERENCES activity_status (status_name)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
@@ -261,7 +253,6 @@ CREATE TABLE cart_item
         REFERENCES product_detail (product_detail_id)
         ON DELETE CASCADE
 );
-
 
 -- [리뷰] 테이블
 CREATE TABLE review
