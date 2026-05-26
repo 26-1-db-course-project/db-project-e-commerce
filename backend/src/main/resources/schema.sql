@@ -201,15 +201,22 @@ CREATE TABLE order_item
 CREATE TABLE option_type
 (
     option_type_id   BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_name VARCHAR(30) NOT NULL
+    option_type_name VARCHAR(30) NOT NULL,
+
+    CONSTRAINT unique_option_type_name UNIQUE (option_type_name),
+    CONSTRAINT check_option_type_name CHECK (option_type_name <> '')
 );
 
 --[옵션 상세 (예: S, M, L / 빨강, 파랑]
 CREATE TABLE option_detail
 (
     option_detail_id BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_id   BIGINT,
+    option_type_id   BIGINT      NOT NULL,
     option_value     VARCHAR(30) NOT NULL,
+
+    UNIQUE (option_type_id, option_value),
+
+    CONSTRAINT check_option_value CHECK (option_value <> ''),
 
     FOREIGN KEY (option_type_id)
         REFERENCES option_type (option_type_id)
@@ -258,19 +265,18 @@ CREATE TABLE review
     review_id      BIGINT        NOT NULL AUTO_INCREMENT,
     member_id      BIGINT        NOT NULL,
     product_id     BIGINT        NOT NULL,
+    report_count   INT                 DEFAULT 0,
 
     rating         INT           NOT NULL
         CHECK (rating BETWEEN 1 AND 5),
 
     review_content VARCHAR(1000) NOT NULL,
 
-    created_at     DATETIME      NOT NULL
-        DEFAULT CURRENT_TIMESTAMP,
+    created_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     updated_at     DATETIME NULL,
 
-    review_status  VARCHAR(20)   NOT NULL
-        DEFAULT 'NORMAL',
+    review_status  VARCHAR(20)   NOT NULL DEFAULT 'NORMAL',
 
     PRIMARY KEY (review_id),
 
@@ -320,3 +326,4 @@ CREATE TABLE review_report
 
 -- report_status 인덱스 추가
 CREATE INDEX idx_review_report_status ON review_report (report_status);
+
