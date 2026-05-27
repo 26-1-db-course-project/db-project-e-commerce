@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS option_type;
 CREATE TABLE activity_status
 (
     activity_status_id BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    status_name        VARCHAR(20) NOT NULL UNIQUE, -- 'active' | 'suspended' | 'withdrawn'
+    status_name        VARCHAR(20) NOT NULL UNIQUE, -- 'active' | 'suspended' | 'DELETE'
     report_count       INT         NOT NULL DEFAULT 0
 );
 
@@ -51,8 +51,8 @@ CREATE TABLE member
     password     VARCHAR(255) NOT NULL,
     email        VARCHAR(100) NOT NULL,
     phone_number VARCHAR(20)  NOT NULL,
-    status_name  VARCHAR(20)  NOT NULL,
-    grade_name   VARCHAR(20)  NOT NULL,
+    activity_status_id  BIGINT  NOT NULL,
+    grade_id    BIGINT  NOT NULL,
     total_purchase_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
     report_count          INT           NOT NULL DEFAULT 0,
     FOREIGN KEY (status_name) REFERENCES activity_status (status_name)
