@@ -1,19 +1,13 @@
--- DROP TABLE IF EXISTS member_conn_test;
---
--- CREATE TABLE member_conn_test (
---     member_id INT AUTO_INCREMENT PRIMARY KEY,
---     nickname VARCHAR(50) NOT NULL
--- );
-
--- [주문상태] 테이블
 DROP TABLE IF EXISTS review_report;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS order_item;
 DROP TABLE IF EXISTS order_status;
 DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS cart_item;
 DROP TABLE IF EXISTS product_option;
 DROP TABLE IF EXISTS product_detail;
 DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS cart;
 DROP TABLE IF EXISTS delivery_address;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS business;
@@ -24,7 +18,6 @@ DROP TABLE IF EXISTS manufacturer;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS option_detail;
 DROP TABLE IF EXISTS option_type;
-
 
 -- [활동 상태] 테이블
 CREATE TABLE activity_status
@@ -38,7 +31,7 @@ CREATE TABLE activity_status
 CREATE TABLE member_grade
 (
     grade_id              BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    grade_name            VARCHAR(20)    NOT NULL UNIQUE, -- 'welcome' | 'silver' | 'gold'
+    grade_name            VARCHAR(20)    NOT NULL UNIQUE,
     total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
     shipping_fee          INT           NOT NULL DEFAULT 0
 );
@@ -55,6 +48,15 @@ CREATE TABLE member
     grade_id    BIGINT  NOT NULL,
     total_purchase_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
     report_count          INT           NOT NULL DEFAULT 0,
+    member_id             BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    login_id              VARCHAR(50)    NOT NULL UNIQUE, -- 기존의 문자열 ID 역할을 할 로그인용 아이디
+    password              VARCHAR(255)   NOT NULL,
+    email                 VARCHAR(100)   NOT NULL,
+    phone_number          VARCHAR(20)    NOT NULL,
+    status_name           VARCHAR(20)    NOT NULL,
+    grade_name            VARCHAR(20)    NOT NULL,
+    total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    report_count          INT            NOT NULL DEFAULT 0,
     FOREIGN KEY (status_name) REFERENCES activity_status (status_name)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
@@ -92,6 +94,16 @@ CREATE TABLE business
     FOREIGN KEY (member_id) REFERENCES member (member_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
+);
+
+-- [장바구니] 테이블
+CREATE TABLE cart
+(
+    member_id BIGINT NOT NULL PRIMARY KEY,
+
+    FOREIGN KEY (member_id)
+        REFERENCES member (member_id)
+        ON DELETE CASCADE
 );
 
 -- [주문상태] 테이블
@@ -201,15 +213,22 @@ CREATE TABLE order_item
 CREATE TABLE option_type
 (
     option_type_id   BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_name VARCHAR(30) NOT NULL
+    option_type_name VARCHAR(30) NOT NULL,
+
+    CONSTRAINT unique_option_type_name UNIQUE (option_type_name),
+    CONSTRAINT check_option_type_name CHECK (option_type_name <> '')
 );
 
 --[옵션 상세 (예: S, M, L / 빨강, 파랑]
 CREATE TABLE option_detail
 (
     option_detail_id BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    option_type_id   BIGINT,
+    option_type_id   BIGINT      NOT NULL,
     option_value     VARCHAR(30) NOT NULL,
+
+    UNIQUE (option_type_id, option_value),
+
+    CONSTRAINT check_option_value CHECK (option_value <> ''),
 
     FOREIGN KEY (option_type_id)
         REFERENCES option_type (option_type_id)
@@ -232,25 +251,44 @@ CREATE TABLE product_option
     PRIMARY KEY (product_detail_id, option_detail_id)
 );
 
+-- [장바구니 아이템] 테이블
+CREATE TABLE cart_item
+(
+    cart_item_id      BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    member_id         BIGINT NOT NULL,
+    product_detail_id BIGINT NOT NULL,
+    quantity          BIGINT NOT NULL DEFAULT 1,
+
+    CONSTRAINT check_cart_quantity CHECK (quantity >= 1),
+    UNIQUE (member_id, product_detail_id),
+
+    FOREIGN KEY (member_id)
+        REFERENCES cart (member_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (product_detail_id)
+        REFERENCES product_detail (product_detail_id)
+        ON DELETE CASCADE
+);
+
+
 -- [리뷰] 테이블
 CREATE TABLE review
 (
     review_id      BIGINT        NOT NULL AUTO_INCREMENT,
     member_id      BIGINT        NOT NULL,
     product_id     BIGINT        NOT NULL,
+    report_count   INT                 DEFAULT 0,
 
     rating         INT           NOT NULL
         CHECK (rating BETWEEN 1 AND 5),
 
     review_content VARCHAR(1000) NOT NULL,
 
-    created_at     DATETIME      NOT NULL
-        DEFAULT CURRENT_TIMESTAMP,
+    created_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     updated_at     DATETIME NULL,
 
-    review_status  VARCHAR(20)   NOT NULL
-        DEFAULT 'NORMAL',
+    review_status  VARCHAR(20)   NOT NULL DEFAULT 'NORMAL',
 
     PRIMARY KEY (review_id),
 
