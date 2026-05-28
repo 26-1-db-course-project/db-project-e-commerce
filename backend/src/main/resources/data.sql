@@ -12,8 +12,8 @@ VALUES ('WELCOME', 3000),
 -- [회원 더미 데이터]
 -- INSERT 컬럼 목록에 role을 추가했습니다.
 INSERT INTO member (login_id, password, email, phone_number, role, grade_id, activity_status_id, total_purchase_amount, report_count)
-VALUES ('kim123', '1234', 'kim123@gmail.com', '010-1234-5678', 'ROLE_CUSTOMER', 1, 3, 120000, 0),
-       ('lee456', '1234', 'lee456@naver.com', '010-2345-6789', 'ROLE_BUSINESS', 1, 2, 60000, 1),
+VALUES ('kim123', '1234', 'kim123@gmail.com', '010-1234-5678', 'ROLE_BUSINESS', 1, 3, 120000, 0),
+       ('lee456', '1234', 'lee456@naver.com', '010-2345-6789', 'ROLE_CUSTOMER', 1, 2, 60000, 1),
        ('park789', '1234', 'park789@daum.net', '010-3456-7890', 'ROLE_CUSTOMER', 2, 1, 30000, 3),
        ('choi001', '1234', 'choi001@gmail.com', '010-4567-8901', 'ROLE_CUSTOMER', 1, 3, 200000, 0),
        ('jung002', '1234', 'jung002@naver.com', '010-5678-9012', 'ROLE_CUSTOMER', 3, 1, 0, 0);
