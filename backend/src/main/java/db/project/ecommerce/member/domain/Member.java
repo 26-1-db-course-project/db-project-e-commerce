@@ -13,5 +13,7 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MemberRole role;
 }
