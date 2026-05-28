@@ -48,10 +48,10 @@ CREATE TABLE member
     grade_id    BIGINT  NOT NULL,
     total_purchase_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
     report_count          INT           NOT NULL DEFAULT 0,
-    FOREIGN KEY (status_name) REFERENCES activity_status (status_name)
+    FOREIGN KEY (activity_status_id) REFERENCES activity_status (activity_status_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
-    FOREIGN KEY (grade_name) REFERENCES member_grade (grade_name)
+    FOREIGN KEY (grade_id) REFERENCES member_grade (grade_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
