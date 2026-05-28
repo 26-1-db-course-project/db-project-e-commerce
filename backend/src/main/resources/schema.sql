@@ -33,21 +33,22 @@ CREATE TABLE member_grade
     grade_id              BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     grade_name            VARCHAR(20)    NOT NULL UNIQUE,
     total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    shipping_fee          INT           NOT NULL DEFAULT 0
+    shipping_fee          INT            NOT NULL DEFAULT 0
 );
 
 -- [사용자] 테이블
 CREATE TABLE member
 (
-    member_id    BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    login_id     VARCHAR(50)  NOT NULL UNIQUE, -- 기존의 문자열 ID 역할을 할 로그인용 아이디
-    password     VARCHAR(255) NOT NULL,
-    email        VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(20)  NOT NULL,
-    activity_status_id  BIGINT  NOT NULL,
-    grade_id    BIGINT  NOT NULL,
-    total_purchase_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
-    report_count          INT           NOT NULL DEFAULT 0,
+    member_id             BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    login_id              VARCHAR(50)    NOT NULL UNIQUE, -- 기존의 문자열 ID 역할을 할 로그인용 아이디
+    password              VARCHAR(255)   NOT NULL,
+    email                 VARCHAR(100)   NOT NULL,
+    phone_number          VARCHAR(20)    NOT NULL,
+    role                  VARCHAR(20)    NOT NULL,
+    activity_status_id    BIGINT         NOT NULL,
+    grade_id              BIGINT         NOT NULL,
+    total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    report_count          INT            NOT NULL DEFAULT 0,
     FOREIGN KEY (activity_status_id) REFERENCES activity_status (activity_status_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
@@ -268,7 +269,7 @@ CREATE TABLE review
     review_id      BIGINT        NOT NULL AUTO_INCREMENT,
     member_id      BIGINT        NOT NULL,
     product_id     BIGINT        NOT NULL,
-    report_count   INT                 DEFAULT 0,
+    report_count   INT                    DEFAULT 0,
 
     rating         INT           NOT NULL
         CHECK (rating BETWEEN 1 AND 5),
