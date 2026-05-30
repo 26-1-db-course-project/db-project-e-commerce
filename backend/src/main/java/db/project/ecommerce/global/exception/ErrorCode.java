@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
     NOT_FOUND (404, "요청하신 내용을 찾을 수 없습니다."),
+    MEMBER_NOT_FOUND (404, "요청한 회원 정보가 존재하지 않습니다."),
     FORBIDDEN (403, "접근 권한이 없습니다"),
     BAD_REQUEST (400, "잘못된 요청입니다.");
 
