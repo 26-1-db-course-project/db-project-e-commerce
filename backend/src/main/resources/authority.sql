@@ -1,7 +1,7 @@
 -- DB_NAME에는 DATABASE 이름 넣으면 됨
 
 -- 일반 사용자 (Spring Boot 앱 서버 전용)
---    DML만 허용, DDL/DCL 차단
+-- DML만 허용, DDL/DCL 차단
 CREATE USER IF NOT EXISTS 'app_user'@'%' IDENTIFIED BY 'app_password';
 GRANT SELECT, INSERT, UPDATE, DELETE ON `{DB_NAME}`.* TO 'app_user'@'%';
 
