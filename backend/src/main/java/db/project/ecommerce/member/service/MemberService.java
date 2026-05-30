@@ -23,7 +23,6 @@ public class MemberService {
     private final AddressRepository addressRepository;
     private final MemberGradeRepository memberGradeRepository;
     private final ActivityStatusRepository activityStatusRepository;
-    private final MemberValidator memberValidator;
 
     @Transactional
     public CreateMemberResponse createMember(CreateMemberRequest request) {
@@ -52,14 +51,15 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MemberResponse getMember(Long memberId) {
-        Member member = memberValidator.getActiveMember(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         return new MemberResponse(member);
     }
 
     @Transactional
     public UpdateAddressResponse updateAddress(Long memberId, Long addressId, UpdateAddressRequest request) {
-        // 고객/업체 모두 자신의 주소를 수정할 수 있음
-        Member member = memberValidator.getActiveMember(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new IllegalArgumentException("주소 수정에 실패하였습니다"));
@@ -76,8 +76,8 @@ public class MemberService {
 
     @Transactional
     public DeleteMemberResponse deleteMember(Long memberId) {
-        // 고객/업체 모두 탈퇴 가능
-        Member member = memberValidator.getActiveMember(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         ActivityStatus deletedStatus = activityStatusRepository.findByStatusName("DELETED")
                 .orElseThrow(() -> new IllegalArgumentException("회원 삭제에 실패하였습니다"));
