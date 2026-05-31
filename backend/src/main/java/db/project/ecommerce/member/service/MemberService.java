@@ -3,6 +3,7 @@ package db.project.ecommerce.member.service;
 import db.project.ecommerce.global.exception.CustomException;
 import db.project.ecommerce.global.exception.ErrorCode;
 import db.project.ecommerce.member.domain.*;
+import db.project.ecommerce.member.dto.request.AddressRequest;
 import db.project.ecommerce.member.dto.request.CreateMemberRequest;
 import db.project.ecommerce.member.dto.request.UpdateAddressRequest;
 import db.project.ecommerce.member.dto.response.*;
@@ -26,14 +27,14 @@ public class MemberService {
 
     @Transactional
     public CreateMemberResponse createMember(CreateMemberRequest request) {
-        if (memberRepository.existsByLoginId(request.getId())) {
+        if (memberRepository.existsByLoginId(request.getLoginId())) {
             throw new IllegalArgumentException("멤버 생성에 실패하였습니다");
         }
         if (memberRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("멤버 생성에 실패하였습니다");
         }
-
-        MemberGrade grade = memberGradeRepository.findByGradeName(request.getMemberType().name())
+        // 회원 가입할 때 등급, 활동상태 초기 상태는 고정
+        MemberGrade grade = memberGradeRepository.findByGradeName("WELCOME")
                 .orElseThrow(() -> new IllegalArgumentException("멤버 생성에 실패하였습니다"));
 
         ActivityStatus activeStatus = activityStatusRepository.findByStatusName("ACTIVE")
@@ -72,6 +73,18 @@ public class MemberService {
 
         address.update(request.getCity(), request.getDistrict(), request.getDetailAddress());
         return new UpdateAddressResponse(member, address);
+    }
+
+    @Transactional
+    public AddressResponse addAddress(Long memberId, AddressRequest request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Address address = request.toEntity(member);
+        addressRepository.save(address);
+        member.addAddress(address);
+
+        return new AddressResponse(address);
     }
 
     @Transactional

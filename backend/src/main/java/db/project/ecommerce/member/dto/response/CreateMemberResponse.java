@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CreateMemberResponse {
-    private final String id;
+    private final long id;
+    private final String loginId;
     private final String email;
     private final String password;
 
@@ -23,7 +24,8 @@ public class CreateMemberResponse {
     private final String message;
 
     public CreateMemberResponse(Member member) {
-        this.id = member.getLoginId();
+        this.id = member.getId();
+        this.loginId = member.getLoginId();
         this.email = member.getEmail();
         this.password = member.getPassword();
         this.phoneNumber = member.getPhoneNumber();

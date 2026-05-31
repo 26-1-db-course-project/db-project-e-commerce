@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CreateMemberRequest {
 
     @NotBlank(message = "아이디는 필수입니다.")
-    private String id;
+    private String loginId;
 
     @NotBlank(message = "이메일은 필수입니다.")
     @Email(message = "유효한 이메일 형식이 아닙니다.")
@@ -27,15 +27,12 @@ public class CreateMemberRequest {
     @NotNull(message = "역할은 필수입니다.")
     private MemberRole role;
 
-    @NotNull(message = "멤버 등급은 필수입니다.")
-    private MemberType memberType;
-
     @NotNull(message = "주소는 필수입니다.")
     private AddressRequest address;
 
     public Member toEntity(MemberGrade grade, ActivityStatus activityStatus) {
         return Member.builder()
-                .loginId(id)
+                .loginId(loginId)
                 .email(email)
                 .password(password)
                 .phoneNumber(phoneNumber)

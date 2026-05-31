@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 
 @Getter
 public class MemberResponse {
-    private final String id;
+    private final Long memberId;
+    private final String loginId;
     private final String email;
     private final String password;
-
     private final String phoneNumber;
-
-    private final String memberType;
+    private final String memberGrade;
+    private final String activityStatus;
     private final AddressResponse address;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
@@ -24,11 +24,13 @@ public class MemberResponse {
     private final LocalDateTime updatedTime;
 
     public MemberResponse(Member member) {
-        this.id = member.getLoginId();
+        this.memberId = member.getId();
+        this.loginId = member.getLoginId();
         this.email = member.getEmail();
         this.password = member.getPassword();
         this.phoneNumber = member.getPhoneNumber();
-        this.memberType = member.getGrade().getGradeName();
+        this.memberGrade  = member.getGrade().getGradeName();
+        this.activityStatus = member.getActivityStatus().getStatusName();
         this.address = member.getAddresses().isEmpty() ? null : new AddressResponse(member.getAddresses().get(0));
         this.joinedDate = member.getCreatedAt();
         this.updatedTime = member.getModifiedAt();

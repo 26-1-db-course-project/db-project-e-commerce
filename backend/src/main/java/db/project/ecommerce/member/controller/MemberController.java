@@ -1,11 +1,9 @@
 package db.project.ecommerce.member.controller;
 
+import db.project.ecommerce.member.dto.request.AddressRequest;
 import db.project.ecommerce.member.dto.request.CreateMemberRequest;
 import db.project.ecommerce.member.dto.request.UpdateAddressRequest;
-import db.project.ecommerce.member.dto.response.CreateMemberResponse;
-import db.project.ecommerce.member.dto.response.DeleteMemberResponse;
-import db.project.ecommerce.member.dto.response.MemberResponse;
-import db.project.ecommerce.member.dto.response.UpdateAddressResponse;
+import db.project.ecommerce.member.dto.response.*;
 import db.project.ecommerce.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,12 +30,21 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+    // 주소 수정
     @PatchMapping("/{memberId}/{addressId}")
     public ResponseEntity<UpdateAddressResponse> updateAddress(@PathVariable("memberId") Long memberId,
                                                                @PathVariable("addressId") Long addressId,
                                                                @RequestBody UpdateAddressRequest request) {
         UpdateAddressResponse response = memberService.updateAddress(memberId, addressId, request);
         return ResponseEntity.ok(response);
+    }
+
+    // 주소 추가 (다중주소)
+    @PostMapping("/{memberId}/addresses")
+    public ResponseEntity<AddressResponse> addAddress(@PathVariable("memberId") Long memberId,
+                                                      @RequestBody AddressRequest request) {
+        AddressResponse response = memberService.addAddress(memberId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{memberId}")
