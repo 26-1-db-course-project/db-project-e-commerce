@@ -185,18 +185,18 @@ CREATE TABLE product_detail
 -- [주문목록] 테이블
 CREATE TABLE order_item
 (
-    order_item_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    order_id      BIGINT NOT NULL,
-    product_id    BIGINT NOT NULL,
-    status_id     BIGINT NOT NULL,
-    quantity      BIGINT NOT NULL DEFAULT 1,
-    order_price   BIGINT NOT NULL,
+    order_item_id     BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    order_id          BIGINT NOT NULL,
+    product_detail_id BIGINT NOT NULL,
+    status_id         BIGINT NOT NULL,
+    quantity          BIGINT NOT NULL DEFAULT 1,
+    order_price       BIGINT NOT NULL,
 
     FOREIGN KEY (order_id)
         REFERENCES orders (order_id)
         ON DELETE CASCADE,
-    FOREIGN KEY (product_id)
-        REFERENCES product (product_id)
+    FOREIGN KEY (product_detail_id)
+        REFERENCES product_detail (product_detail_id)
         ON DELETE RESTRICT,
     FOREIGN KEY (status_id)
         REFERENCES order_status (status_id)
