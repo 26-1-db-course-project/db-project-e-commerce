@@ -49,6 +49,8 @@ CREATE TABLE member
     grade_id              BIGINT         NOT NULL,
     total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
     report_count          INT            NOT NULL DEFAULT 0,
+    created_at            DATETIME,
+    modified_at           DATETIME,
     FOREIGN KEY (activity_status_id) REFERENCES activity_status (activity_status_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
@@ -268,8 +270,8 @@ CREATE TABLE review
 (
     review_id      BIGINT        NOT NULL AUTO_INCREMENT,
     member_id      BIGINT        NOT NULL,
-    product_id     BIGINT        NOT NULL,
-    report_count   INT                    DEFAULT 0,
+    product_detail_id     BIGINT        NOT NULL,
+    report_count   INT                 DEFAULT 0,
 
     rating         INT           NOT NULL
         CHECK (rating BETWEEN 1 AND 5),
@@ -290,8 +292,8 @@ CREATE TABLE review
         REFERENCES member (member_id)
         ON DELETE CASCADE,
 
-    FOREIGN KEY (product_id)
-        REFERENCES product (product_id)
+    FOREIGN KEY (product_detail_id)
+        REFERENCES product_detail (product_detail_id)
         ON DELETE CASCADE
 );
 

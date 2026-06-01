@@ -1,6 +1,6 @@
 package db.project.ecommerce.product.repository;
 
-import db.project.ecommerce.product.domain.Category;
+import db.project.ecommerce.product.domain.additionalinfo.Category;
 import db.project.ecommerce.product.domain.Product;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;

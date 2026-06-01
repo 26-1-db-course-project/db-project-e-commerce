@@ -2,17 +2,18 @@ package db.project.ecommerce.product.service;
 
 import db.project.ecommerce.global.exception.CustomException;
 import db.project.ecommerce.global.exception.ErrorCode;
-import db.project.ecommerce.product.domain.Category;
-import db.project.ecommerce.product.domain.Manufacturer;
-import db.project.ecommerce.product.domain.Product;
+import db.project.ecommerce.product.domain.*;
+import db.project.ecommerce.product.domain.additionalinfo.Category;
+import db.project.ecommerce.product.domain.additionalinfo.Manufacturer;
 import db.project.ecommerce.product.dto.request.CreateProductRequest;
 import db.project.ecommerce.product.dto.request.SearchProduct;
 import db.project.ecommerce.product.dto.request.UpdateProductPrice;
+import db.project.ecommerce.product.domain.option.OptionDetail;
+import db.project.ecommerce.product.dto.response.ProductDetailListResponse;
 import db.project.ecommerce.product.dto.response.ProductListResponse;
+import db.project.ecommerce.product.dto.response.ProductOptionGroupResponse;
 import db.project.ecommerce.product.dto.response.ProductResponse;
-import db.project.ecommerce.product.repository.CategoryRepository;
-import db.project.ecommerce.product.repository.ManufacturerRepository;
-import db.project.ecommerce.product.repository.ProductRepository;
+import db.project.ecommerce.product.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class ProductService {
     private final ManufacturerRepository manufacturerRepository;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final ProductDetailRepository productDetailRepository;
+    private final OptionDetailRepository optionDetailRepository;
 
     //TODO: 상품 생성
     @Transactional
@@ -95,6 +98,24 @@ public class ProductService {
         List<Product> productList = productRepository.searchByName(request.getKeyword(),sort);
 
         return ProductListResponse.of(productList);
+    }
+
+    //TODO: 상품 상세 조회
+    @Transactional(readOnly = true)
+    public ProductDetailListResponse getProductDetailList(Long productId) {
+        Product product = getProduct(productId);
+        List<ProductDetail> productDetails = productDetailRepository.findAllByProductWithOptions(product);
+
+        return ProductDetailListResponse.of(productDetails);
+    }
+
+    //TODO: 상품 옵션 그룹 조회
+    @Transactional(readOnly = true)
+    public ProductOptionGroupResponse getProductOptions(Long productId) {
+        Product product = getProduct(productId);
+        List<OptionDetail> options = optionDetailRepository.findDistinctOptionsByProduct(product);
+
+        return ProductOptionGroupResponse.of(productId, options);
     }
 
     private Product getProduct(Long productId) {
