@@ -2,9 +2,8 @@ package db.project.ecommerce.review.domain;
 
 import db.project.ecommerce.global.domain.BaseEntity;
 import db.project.ecommerce.member.domain.Member;
-import db.project.ecommerce.product.domain.Product;
 import db.project.ecommerce.product.domain.ProductDetail;
-import db.project.ecommerce.review.ReviewStatus;
+import db.project.ecommerce.review.enums.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,5 +43,14 @@ public class Review extends BaseEntity {
         this.productDetail = productDetail;
         this.rating = rating;
         this.content = content;
+    }
+
+    public void updateReview(int rating, String content) {
+        this.rating = (rating < 0) ? 0 : rating;
+        if (content != null) this.content = content;
+    }
+
+    public void updateStatus(ReviewStatus status) {
+        this.status = status;
     }
 }
