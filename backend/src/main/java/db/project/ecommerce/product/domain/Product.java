@@ -1,5 +1,7 @@
 package db.project.ecommerce.product.domain;
 
+import db.project.ecommerce.product.domain.additionalinfo.Category;
+import db.project.ecommerce.product.domain.additionalinfo.Manufacturer;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

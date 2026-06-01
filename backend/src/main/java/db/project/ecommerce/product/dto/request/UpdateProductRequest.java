@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchProduct {
-    private String keyword;
+public class UpdateProductRequest {
+    private Long stockQuantity;
+    private Long surcharge;
+    private Long sales;
+    private String imageUrl;
 }

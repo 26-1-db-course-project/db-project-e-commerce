@@ -1,4 +1,4 @@
-package db.project.ecommerce.product.domain;
+package db.project.ecommerce.product.domain.additionalinfo;
 
 import jakarta.persistence.*;
 import lombok.Builder;
