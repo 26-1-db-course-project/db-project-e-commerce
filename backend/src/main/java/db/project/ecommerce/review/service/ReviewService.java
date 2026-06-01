@@ -12,11 +12,11 @@ import db.project.ecommerce.review.dto.request.CreateReviewRequest;
 import db.project.ecommerce.review.dto.request.UpdateReviewRequest;
 import db.project.ecommerce.review.dto.response.ReviewListResponse;
 import db.project.ecommerce.review.dto.response.ReviewResponse;
+import db.project.ecommerce.review.enums.ReviewStatus;
 import db.project.ecommerce.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -69,7 +69,7 @@ public class ReviewService {
         Member member = memberService.findMember(memberId);
         authorizeWriter(review, member);
 
-        reviewRepository.delete(review);
+        review.updateStatus(ReviewStatus.DELETED);
     }
 
     public Review findReview(Long reviewId) {
