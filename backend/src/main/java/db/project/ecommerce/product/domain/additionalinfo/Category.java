@@ -15,10 +15,10 @@ public class Category {
     private Long id;
 
     @Column(name = "category_name")
-    private String category;
+    private String categoryName;
 
     @Builder
     public Category(String category) {
-        this.category = category;
+        this.categoryName = category;
     }
 }

@@ -3,7 +3,7 @@ package db.project.ecommerce.member.service;
 import db.project.ecommerce.global.exception.CustomException;
 import db.project.ecommerce.global.exception.ErrorCode;
 import db.project.ecommerce.member.domain.Member;
-import db.project.ecommerce.member.domain.MemberRole;
+import db.project.ecommerce.member.enums.MemberRole;
 import db.project.ecommerce.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

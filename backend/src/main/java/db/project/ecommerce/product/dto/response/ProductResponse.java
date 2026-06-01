@@ -21,7 +21,7 @@ public class ProductResponse {
                 .productId(product.getId())
                 .productName(product.getProductName())
                 .price(product.getPrice())
-                .category(product.getCategory().getCategory())
+                .category(product.getCategory().getCategoryName())
                 .manufacturer(product.getManufacturer().getCompany())
                 .imageUrl(product.getImageUrl())
                 .build();

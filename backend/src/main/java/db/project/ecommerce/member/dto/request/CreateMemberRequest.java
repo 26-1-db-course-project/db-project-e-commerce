@@ -1,6 +1,7 @@
 package db.project.ecommerce.member.dto.request;
 
 import db.project.ecommerce.member.domain.*;
+import db.project.ecommerce.member.enums.MemberRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
