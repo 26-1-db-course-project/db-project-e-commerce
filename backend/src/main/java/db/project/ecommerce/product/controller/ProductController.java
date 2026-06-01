@@ -4,8 +4,10 @@ import db.project.ecommerce.product.dto.request.CreateProductRequest;
 import db.project.ecommerce.product.dto.request.SearchProduct;
 import db.project.ecommerce.product.dto.request.UpdateProductPrice;
 import db.project.ecommerce.product.dto.response.ProductListResponse;
+import db.project.ecommerce.product.dto.response.ProductOptionGroupResponse;
 import db.project.ecommerce.product.dto.response.ProductResponse;
 import db.project.ecommerce.product.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,9 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     private final ProductService productService;
 
-
     //TODO: 상품 생성
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody CreateProductRequest request) {
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody CreateProductRequest request) {
         ProductResponse response = productService.createProduct(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -77,5 +78,13 @@ public class ProductController {
         productService.deleteProduct(productId);
 
         return ResponseEntity.ok().build();
+    }
+
+    //TODO: 상품 옵션 그룹 조회 (옵션 타입별 선택 가능한 값 목록)
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<ProductOptionGroupResponse> getProductOptions(@PathVariable("productId") Long productId) {
+        ProductOptionGroupResponse response = productService.getProductOptions(productId);
+
+        return ResponseEntity.ok(response);
     }
 }

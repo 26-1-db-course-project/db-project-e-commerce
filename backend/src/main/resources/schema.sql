@@ -267,7 +267,7 @@ CREATE TABLE review
 (
     review_id      BIGINT        NOT NULL AUTO_INCREMENT,
     member_id      BIGINT        NOT NULL,
-    product_id     BIGINT        NOT NULL,
+    product_detail_id     BIGINT        NOT NULL,
     report_count   INT                 DEFAULT 0,
 
     rating         INT           NOT NULL
@@ -289,8 +289,8 @@ CREATE TABLE review
         REFERENCES member (member_id)
         ON DELETE CASCADE,
 
-    FOREIGN KEY (product_id)
-        REFERENCES product (product_id)
+    FOREIGN KEY (product_detail_id)
+        REFERENCES product_detail (product_detail_id)
         ON DELETE CASCADE
 );
 
