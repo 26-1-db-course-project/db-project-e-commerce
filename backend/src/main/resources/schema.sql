@@ -185,18 +185,18 @@ CREATE TABLE product_detail
 -- [주문목록] 테이블
 CREATE TABLE order_item
 (
-    order_item_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    order_id      BIGINT NOT NULL,
-    product_id    BIGINT NOT NULL,
-    status_id     BIGINT NOT NULL,
-    quantity      BIGINT NOT NULL DEFAULT 1,
-    order_price   BIGINT NOT NULL,
+    order_item_id     BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    order_id          BIGINT NOT NULL,
+    product_detail_id BIGINT NOT NULL,
+    status_id         BIGINT NOT NULL,
+    quantity          BIGINT NOT NULL DEFAULT 1,
+    order_price       BIGINT NOT NULL,
 
     FOREIGN KEY (order_id)
         REFERENCES orders (order_id)
         ON DELETE CASCADE,
-    FOREIGN KEY (product_id)
-        REFERENCES product (product_id)
+    FOREIGN KEY (product_detail_id)
+        REFERENCES product_detail (product_detail_id)
         ON DELETE RESTRICT,
     FOREIGN KEY (status_id)
         REFERENCES order_status (status_id)
@@ -268,21 +268,21 @@ CREATE TABLE cart_item
 -- [리뷰] 테이블
 CREATE TABLE review
 (
-    review_id      BIGINT        NOT NULL AUTO_INCREMENT,
-    member_id      BIGINT        NOT NULL,
-    product_detail_id     BIGINT        NOT NULL,
-    report_count   INT                 DEFAULT 0,
+    review_id         BIGINT        NOT NULL AUTO_INCREMENT,
+    member_id         BIGINT        NOT NULL,
+    product_detail_id BIGINT        NOT NULL,
+    report_count      INT                    DEFAULT 0,
 
-    rating         INT           NOT NULL
+    rating            INT           NOT NULL
         CHECK (rating BETWEEN 1 AND 5),
 
-    review_content VARCHAR(1000) NOT NULL,
+    review_content    VARCHAR(1000) NOT NULL,
 
-    created_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at        DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    updated_at     DATETIME NULL,
+    updated_at        DATETIME NULL,
 
-    review_status  VARCHAR(20)   NOT NULL DEFAULT 'NORMAL',
+    review_status     VARCHAR(20)   NOT NULL DEFAULT 'NORMAL',
 
     PRIMARY KEY (review_id),
 
