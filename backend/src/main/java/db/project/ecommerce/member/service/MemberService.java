@@ -101,4 +101,10 @@ public class MemberService {
 
         return new DeleteMemberResponse(loginId, deletedDate);
     }
+
+    //멤버 찾는 헬퍼 메소드 추가
+    public Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
 }

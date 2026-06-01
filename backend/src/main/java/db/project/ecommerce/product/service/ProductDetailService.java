@@ -68,19 +68,17 @@ public class ProductDetailService {
         return ProductDetailResponse.of(productDetail);
     }
 
-
-    //TODO: private 헬퍼 메소드
-    private Product getProduct(Long productId) {
+    public Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
     }
 
-    private ProductDetail getProductDetail(Long productDetailId) {
+    public ProductDetail getProductDetail(Long productDetailId) {
         return productDetailRepository.findById(productDetailId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
     }
 
-    private OptionDetail findOptionDetail(Long optionDetailId) {
+    public OptionDetail findOptionDetail(Long optionDetailId) {
         return optionDetailRepository.findById(optionDetailId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
     }
