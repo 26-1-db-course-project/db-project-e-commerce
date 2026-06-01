@@ -1,6 +1,7 @@
 package db.project.ecommerce.member.domain;
 
 import db.project.ecommerce.global.domain.BaseEntity;
+import db.project.ecommerce.member.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
