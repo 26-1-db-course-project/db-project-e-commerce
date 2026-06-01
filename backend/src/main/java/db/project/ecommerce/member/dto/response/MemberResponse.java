@@ -33,6 +33,6 @@ public class MemberResponse {
         this.activityStatus = member.getActivityStatus().getStatusName();
         this.address = member.getAddresses().isEmpty() ? null : new AddressResponse(member.getAddresses().get(0));
         this.joinedDate = member.getCreatedAt();
-        this.updatedTime = member.getModifiedAt();
+        this.updatedTime = member.getUpdatedAt();
     }
 }

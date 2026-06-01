@@ -268,25 +268,25 @@ CREATE TABLE cart_item
 -- [리뷰] 테이블
 CREATE TABLE review
 (
-    review_id      BIGINT        NOT NULL AUTO_INCREMENT,
-    member_id      BIGINT        NOT NULL,
-    product_detail_id     BIGINT        NOT NULL,
-    report_count   INT                 DEFAULT 0,
+    review_id         BIGINT        NOT NULL AUTO_INCREMENT,
+    member_id         BIGINT        NOT NULL,
+    product_detail_id BIGINT        NOT NULL,
+    report_count      INT                    DEFAULT 0,
 
-    rating         INT           NOT NULL
+    rating            INT           NOT NULL
         CHECK (rating BETWEEN 1 AND 5),
 
-    review_content VARCHAR(1000) NOT NULL,
+    review_content    VARCHAR(1000) NOT NULL,
 
-    created_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at        DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    updated_at     DATETIME NULL,
+    updated_at        DATETIME NULL,
 
-    review_status  VARCHAR(20)   NOT NULL DEFAULT 'NORMAL',
+    review_status     VARCHAR(20)   NOT NULL DEFAULT 'NORMAL',
 
     PRIMARY KEY (review_id),
 
-    UNIQUE (member_id, product_id),
+    UNIQUE (member_id, product_detail_id),
 
     FOREIGN KEY (member_id)
         REFERENCES member (member_id)
