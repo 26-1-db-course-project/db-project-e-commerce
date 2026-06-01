@@ -64,6 +64,7 @@ yarn-error.log*
 !src/main/resources/schema.sql
 !backend/src/main/resources/data.sql
 !backend/src/main/resources/schema.sql
+!backend/src/main/resources/authority.sql
 
 # 민감한 설정 파일 (프로젝트 구조에 맞춰 파일명 확인 필요)
 src/main/resources/application-local.yml
