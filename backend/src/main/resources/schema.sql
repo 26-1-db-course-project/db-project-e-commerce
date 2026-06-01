@@ -49,6 +49,8 @@ CREATE TABLE member
     grade_id              BIGINT         NOT NULL,
     total_purchase_amount DECIMAL(15, 2) NOT NULL DEFAULT 0,
     report_count          INT            NOT NULL DEFAULT 0,
+    created_at            DATETIME,
+    modified_at           DATETIME,
     FOREIGN KEY (activity_status_id) REFERENCES activity_status (activity_status_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
