@@ -3,6 +3,7 @@ package db.project.ecommerce.global.exception;
 import db.project.ecommerce.global.dto.ErrorDto;
 import db.project.ecommerce.global.dto.ErrorResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +56,14 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleTriggerException(DataIntegrityViolationException e) {
+        // 메시지 안에 우리가 트리거에 적어둔 "상품 재고가 부족합니다."라는 텍스트가 포함되어 있습니다.
+        if (e.getMessage().contains("상품 재고가 부족합니다.")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FAIL: 상품 재고가 부족합니다.");
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("DB 오류가 발생했습니다.");
     }
 }
