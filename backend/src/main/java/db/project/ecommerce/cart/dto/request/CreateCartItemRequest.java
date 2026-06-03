@@ -18,13 +18,13 @@ public class CreateCartItemRequest {
 
     @NotNull(message = "수량은 필수입니다.")
     @Min(value = 1, message = "수량은 1개 이상이어야 합니다.")
-    private Long quantity;
+    private Integer quantity;
 
     public CartItem toEntity(Cart cart, ProductDetail productDetail) {
         return CartItem.builder()
                 .cart(cart)
                 .productDetail(productDetail)
-                .quantity(this.quantity)
+                .quantity(Long.valueOf(this.quantity))
                 .build();
     }
 }

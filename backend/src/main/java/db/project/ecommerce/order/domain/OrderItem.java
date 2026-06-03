@@ -44,4 +44,8 @@ public class OrderItem {
         this.quantity = quantity;
         this.orderPrice = orderPrice;
     }
+
+    public void changeStatus(OrderStatus newStatus) {
+        this.status = newStatus;
+    }
 }
