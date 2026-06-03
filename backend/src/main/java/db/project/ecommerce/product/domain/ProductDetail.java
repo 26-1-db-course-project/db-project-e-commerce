@@ -77,6 +77,10 @@ public class ProductDetail {
         }
     }
 
+    public void addStock(Long quantity) {
+        this.stockQuantity += quantity; // 취소한 갯수만큼 재고 창고에 다시 + 해줌
+    }
+
     public void updateProductDetail(Long stockQuantity, Long surcharge, Long sales, String imageUrl) {
         if (stockQuantity!=null) this.stockQuantity = stockQuantity;
         if(surcharge!=null) this.surcharge = surcharge;

@@ -49,4 +49,14 @@ public class OrderController {
         List<OrderResponse> response = orderReadService.getOrdersByDateAfter(memberId, startDate);
         return ResponseEntity.ok(response);
     }
+
+    // PATCH http://localhost:8080/orders/1/cancel?memberId=1로 사용
+    @PatchMapping("/{orderId}/cancel")
+    public ResponseEntity<String> cancelOrder(
+            @PathVariable Long orderId,
+            @RequestParam Long memberId
+    ) {
+        orderService.cancelOrder(memberId, orderId);
+        return ResponseEntity.ok("SUCCESS: 주문이 성공적으로 취소되었습니다.");
+    }
 }

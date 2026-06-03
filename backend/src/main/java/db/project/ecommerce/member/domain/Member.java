@@ -47,6 +47,12 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<>();
 
+    @Column(name = "total_purchase_amount", nullable = false)
+    private Long totalPurchaseAmount = 0L; // 기본값 0원
+
+    @Column(name = "report_count", nullable = false)
+    private int reportCount = 0; // 기본값 0회
+
     @Builder
     public Member(String loginId, String email, String password,
                   String phoneNumber, MemberRole role, ActivityStatus activityStatus, MemberGrade grade) {
@@ -65,5 +71,10 @@ public class Member extends BaseEntity {
 
     public void updateActivityStatus(ActivityStatus activityStatus) {
         this.activityStatus = activityStatus;
+    }
+
+    public void deductTotalAmount(Long amount) {
+        // 취소하면 누적 금액에서 그만큼 뺌.
+        this.totalPurchaseAmount = Math.max(0, this.totalPurchaseAmount - amount);
     }
 }
