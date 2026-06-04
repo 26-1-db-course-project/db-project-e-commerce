@@ -32,35 +32,44 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     List<Orders> findByMember_IdAndOrderDateAfterOrderByOrderDateDesc(Long memberId, LocalDateTime startDate);
   
   @Query(value = """
-        SELECT DATE_FORMAT(order_date, '%Y-%m') AS label,
-               SUM(total_price) AS revenue,
-               COUNT(order_id) AS orderCount
-        FROM orders
-        WHERE order_date >= :startDate AND order_date <= :endDate
+        SELECT DATE_FORMAT(o.order_date, '%Y-%m') AS label,
+               SUM(oi.order_price) AS revenue,
+               COUNT(DISTINCT o.order_id) AS orderCount
+        FROM orders o
+             JOIN order_item oi ON oi.order_id = o.order_id
+             JOIN order_status os ON oi.status_id = os.status_id
+        WHERE o.order_date >= :startDate AND o.order_date < :endDate
+          AND os.status_name <> '주문취소'
         GROUP BY label
         ORDER BY label
     """, nativeQuery = true)
-    List<SalesItemProjection> getMonthlySales(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    List<SalesItemProjection> getMonthlySales(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     @Query(value = """
-        SELECT DATE_FORMAT(order_date, '%Y') AS label,
-               SUM(total_price) AS revenue,
-               COUNT(order_id) AS orderCount
-        FROM orders
-        WHERE order_date >= :startDate AND order_date <= :endDate
+        SELECT DATE_FORMAT(o.order_date, '%Y') AS label,
+               SUM(oi.order_price) AS revenue,
+               COUNT(DISTINCT o.order_id) AS orderCount
+        FROM orders o
+             JOIN order_item oi ON oi.order_id = o.order_id
+             JOIN order_status os ON oi.status_id = os.status_id
+        WHERE o.order_date >= :startDate AND o.order_date < :endDate
+          AND os.status_name <> '주문취소'
         GROUP BY label
         ORDER BY label
     """, nativeQuery = true)
-    List<SalesItemProjection> getYearlySales(@Param("startDate") LocalDate startDate,@Param("endDate") LocalDate endDate);
+    List<SalesItemProjection> getYearlySales(@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
 
     @Query(value = """
-        SELECT DATE_FORMAT(order_date, '%Y-%m-%d') AS label,
-               SUM(total_price) AS revenue,
-               COUNT(order_id) AS orderCount
-        FROM orders
-        WHERE order_date >= :startDate AND order_date <= :endDate
+        SELECT DATE_FORMAT(o.order_date, '%Y-%m-%d') AS label,
+               SUM(oi.order_price) AS revenue,
+               COUNT(DISTINCT o.order_id) AS orderCount
+        FROM orders o
+             JOIN order_item oi ON oi.order_id = o.order_id
+             JOIN order_status os ON oi.status_id = os.status_id
+        WHERE o.order_date >= :startDate AND o.order_date < :endDate
+          AND os.status_name <> '주문취소'
         GROUP BY label
         ORDER BY label
     """, nativeQuery = true)
-    List<SalesItemProjection> getDailySales(@Param("startDate") LocalDate startDate,@Param("endDate") LocalDate endDate);
+    List<SalesItemProjection> getDailySales(@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
 }

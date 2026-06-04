@@ -66,6 +66,7 @@ public class OrderService {
             if (item.getStatus().getId() != 5L) {
                 item.changeStatus(cancelStatus);                  // 상태를 '주문취소'로 변경
                 item.getProductDetail().addStock(item.getQuantity()); // 뺏어갔던 재고 롤백
+                item.getProductDetail().decreaseSales(item.getQuantity()); // 판매량(통계)도 롤백
             }
         }
 

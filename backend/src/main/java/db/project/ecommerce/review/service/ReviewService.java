@@ -64,6 +64,7 @@ public class ReviewService {
     }
 
     //TODO: 리뷰 삭제
+    @Transactional
     public void deleteReview(Long reviewId, Long memberId) {
         Review review = findReview(reviewId);
         Member member = memberService.findMember(memberId);

@@ -54,9 +54,9 @@ public class ProductController {
 
     //TODO: 상품 검색
     @GetMapping("/search")
-    public ResponseEntity<ProductListResponse> searchProduct(@RequestBody SearchProduct request,
+    public ResponseEntity<ProductListResponse> searchProduct(@RequestParam(value = "keyword", required = false) String keyword,
                                                          @RequestParam(defaultValue = "productName,desc") String sortBy) {
-        ProductListResponse response = productService.searchProduct(request, sortBy);
+        ProductListResponse response = productService.searchProduct(new SearchProduct(keyword), sortBy);
 
         return ResponseEntity.ok(response);
 
