@@ -4,8 +4,7 @@ import db.project.ecommerce.statistic.enums.PeriodType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -13,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PeriodSalesListResponse {
     private PeriodType periodType;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Long totalRevenue;
     private Long totalOrders;
     private List<SalesResponse> items;

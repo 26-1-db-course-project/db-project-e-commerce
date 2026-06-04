@@ -21,7 +21,7 @@ public class ProductDetailController {
 
     //TODO: 상품 상세 생성
     @PostMapping
-    public ResponseEntity<ProductDetailResponse> createProductDetail(@PathVariable("productId") Long productId,
+    public ResponseEntity<ProductDetailResponse> createProductDetail(@RequestParam("productId") Long productId,
                                                                      @RequestBody CreateProductDetailRequest request) {
         ProductDetailResponse response = productDetailService.createProductDetail(productId, request);
 
@@ -30,7 +30,7 @@ public class ProductDetailController {
 
     //TODO: 상품 상세 조회 (목록: 상품안에 어떤 상세 요소들이 존재하는지)
     @GetMapping
-    public ResponseEntity<ProductDetailListResponse> getProductDetailList (@PathVariable("productId")Long productId) {
+    public ResponseEntity<ProductDetailListResponse> getProductDetailList (@RequestParam("productId") Long productId) {
         ProductDetailListResponse response = productService.getProductDetailList(productId);
 
         return ResponseEntity.ok(response);
@@ -45,7 +45,7 @@ public class ProductDetailController {
     }
 
     //TODO: 상품상세 수정
-    @PatchMapping("{productDetailId}")
+    @PatchMapping("/{productDetailId}")
     public ResponseEntity<ProductDetailResponse> updateProductDetail(@PathVariable("productDetailId")Long productDetailId,
                                                                      @RequestBody UpdateProductRequest request) {
         ProductDetailResponse response = productDetailService.updateProductDetail(productDetailId, request);

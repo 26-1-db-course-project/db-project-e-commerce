@@ -286,8 +286,6 @@ CREATE TABLE review
 
     PRIMARY KEY (review_id),
 
-    UNIQUE (member_id, product_detail_id),
-
     FOREIGN KEY (member_id)
         REFERENCES member (member_id)
         ON DELETE CASCADE,

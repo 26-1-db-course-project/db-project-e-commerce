@@ -45,7 +45,9 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
         FROM category c JOIN
              product p ON c.category_id = p.category_id JOIN
              product_detail pd ON p.product_id = pd.product_id JOIN
-             order_item oi ON p.product_id = oi.product_id
+             order_item oi ON pd.product_detail_id = oi.product_detail_id JOIN
+             order_status os ON oi.status_id = os.status_id
+        WHERE os.status_name <> '주문취소'
         GROUP BY c.category_id, c.category_name
         ORDER BY revenue DESC
     """, nativeQuery = true)

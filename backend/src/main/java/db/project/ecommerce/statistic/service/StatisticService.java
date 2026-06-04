@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +28,19 @@ public class StatisticService {
     //by Claude.
     public PeriodSalesListResponse getSalesStats(SalesSearchRequest request) {
         PeriodType period = request.getPeriod();
-        LocalDate startDate = request.getStartDate();
-        LocalDate endDate = request.getEndDate();
+        LocalDate reqStart = request.getStartDate();
+        LocalDate reqEnd = request.getEndDate();
+
+        // 날짜(LocalDate) 입력을 조회용 LocalDateTime 범위로 변환.
+        // 종료일을 포함하기 위해 종료일 다음 날 0시 미만(< endExclusive)으로 조회한다.
+        LocalDateTime startDate = (reqStart == null) ? null : reqStart.atStartOfDay();
+        LocalDateTime endDate = (reqEnd == null) ? null : reqEnd.atStartOfDay();
+        LocalDateTime endExclusive = (reqEnd == null) ? null : reqEnd.plusDays(1).atStartOfDay();
 
         List<SalesItemProjection> projections = switch (period) {
-            case DAILY -> orderRepository.getDailySales(startDate, endDate);
-            case YEARLY -> orderRepository.getYearlySales(startDate, endDate);
-            case MONTHLY -> orderRepository.getMonthlySales(startDate, endDate);
+            case DAILY -> orderRepository.getDailySales(startDate, endExclusive);
+            case YEARLY -> orderRepository.getYearlySales(startDate, endExclusive);
+            case MONTHLY -> orderRepository.getMonthlySales(startDate, endExclusive);
         };
 
         List<SalesResponse> items = projections.stream()
