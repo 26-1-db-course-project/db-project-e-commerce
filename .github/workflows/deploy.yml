@@ -17,22 +17,27 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      # 1. backend 폴더 안의 gradlew 파일에 실행 권한 부여
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x backend/gradlew
 
+      # 2. working-directory를 backend로 지정하여 빌드 돌리기
       - name: Build with Gradle
         run: ./gradlew bootJar -x test
+        working-directory: backend
 
+      # 3. backend/build/libs/ 하위의 JAR 파일을 복사 (경로 depth가 하나 늘어났으므로 strip_components: 3)
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
-          source: "build/libs/ecommerce-0.0.1-SNAPSHOT.jar"
+          source: "backend/build/libs/ecommerce-0.0.1-SNAPSHOT.jar"
           target: "/home/ubuntu/db-project-e-commerce"
-          strip_components: 2 
+          strip_components: 3 # backend, build, libs 총 3개의 경로 껍질을 벗기고 JAR 파일만 복사
 
+      # 4. EC2에서 서버 재구동 (이 부분은 이전과 동일하게 파일명 기준으로 작동)
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
