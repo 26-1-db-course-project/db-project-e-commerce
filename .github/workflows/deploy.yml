@@ -38,6 +38,7 @@ jobs:
           strip_components: 3
 
       # 4. EC2에서 리눅스 환경변수 등록 후 스프링 부트 실행 (들여쓰기 수정 완료)
+      # 4. EC2에서 환경변수를 실행 명령어 직전에 붙여서 강제 주입 (가장 확실한 방법)
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -47,14 +48,8 @@ jobs:
           script: |
             cd /home/ubuntu/db-project-e-commerce
             
-            # 기존 서버 확실하게 죽이기
+            # 기존 서버 확실하게 종료
             sudo fuser -k 8080/tcp || true
             
-            # 1. 리눅스 환경 변수로 먼저 등록
-            export RDS_ENDPOINT="${{ secrets.DB_ENDPOINT }}"
-            export DB_USERNAME="${{ secrets.DB_USERNAME }}"
-            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-            export APP_CORS_ALLOWED_ORIGINS="https://db-project-e-commerce.vercel.app"
-            
-            # 2. 스프링 부트 백그라운드 실행
-            nohup java -Dfile.encoding=UTF-8 -jar ecommerce-0.0.1-SNAPSHOT.jar > /home/ubuntu/app.log 2>&1 &
+            # 한 줄로 이어서 실행하여 환경 변수 유실 완벽 차단
+            RDS_ENDPOINT="${{ secrets.DB_ENDPOINT }}" DB_USERNAME="${{ secrets.DB_USERNAME }}" DB_PASSWORD="${{ secrets.DB_PASSWORD }}" APP_CORS_ALLOWED_ORIGINS="https://db-project-e-commerce.vercel.app" nohup java -Dfile.encoding=UTF-8 -jar ecommerce-0.0.1-SNAPSHOT.jar > /home/ubuntu/app.log 2>&1 &
