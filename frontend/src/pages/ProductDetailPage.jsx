@@ -40,7 +40,14 @@ export default function ProductDetailPage() {
 
   const pickOption = (typeName, odId) => {
     setCartMsg(null);
-    setSelectedOptions((prev) => ({ ...prev, [typeName]: odId }));
+    setSelectedOptions((prev) => {
+      // 이미 선택된 옵션을 다시 누르면 선택 취소
+      if (String(prev[typeName]) === String(odId)) {
+        const { [typeName]: _removed, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [typeName]: odId };
+    });
   };
 
   // 모든 그룹이 선택되면 일치하는 SKU 를 찾아 productDetailId 로 확정
@@ -176,7 +183,13 @@ export default function ProductDetailPage() {
                         (String(productDetailId) === String(d.productDetailId) ? ' active' : '') +
                         (soldOut ? ' soldout' : '')
                       }
-                      onClick={() => setProductDetailId(String(d.productDetailId))}
+                      onClick={() =>
+                        setProductDetailId((prev) =>
+                          String(prev) === String(d.productDetailId)
+                            ? ''
+                            : String(d.productDetailId)
+                        )
+                      }
                     >
                       <span className="sku-label">
                         {d.options?.map((o) => o.optionDetailName).join(' / ') ||
