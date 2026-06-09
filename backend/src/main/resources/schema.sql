@@ -67,6 +67,8 @@ CREATE TABLE delivery_address
     city           VARCHAR(50)  NOT NULL,
     district       VARCHAR(50)  NOT NULL,
     detail_address VARCHAR(255) NOT NULL,
+
+    UNIQUE(member_id, city, district, detail_address),
     FOREIGN KEY (member_id) REFERENCES member (member_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
