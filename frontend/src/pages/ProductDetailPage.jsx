@@ -108,8 +108,21 @@ export default function ProductDetailPage() {
       setCartMsg({ type: 'error', text: '옵션을 선택하세요.' });
       return;
     }
+    const qty = Number(quantity);
+    if (!Number.isInteger(qty) || qty < 1) {
+      setCartMsg({ type: 'error', text: '수량을 올바르게 입력하세요.' });
+      return;
+    }
+    // 재고 초과 시 서버 호출 전에 막아 즉시 안내 (서버 프로시저 검증의 1차 가드)
+    if (selectedDetail && qty > selectedDetail.stockQuantity) {
+      setCartMsg({
+        type: 'error',
+        text: `재고가 부족합니다. (남은 재고 ${selectedDetail.stockQuantity}개)`,
+      });
+      return;
+    }
     try {
-      await cartApi.addItem(member.memberId, Number(productDetailId), Number(quantity));
+      await cartApi.addItem(member.memberId, Number(productDetailId), qty);
       setCartMsg({ type: 'success', text: '장바구니에 담았습니다.' });
     } catch (e) {
       setCartMsg({ type: 'error', text: e.message });
