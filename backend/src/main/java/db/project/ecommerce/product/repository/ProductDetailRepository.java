@@ -24,15 +24,18 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
     List<ProductDetail> findAllByProductWithOptions(@Param("product") Product product); //AI 작성
 
     @Query(value = """
-        SELECT  RANK() OVER (ORDER BY SUM(pd.sales) DESC) AS `rank`,
+        SELECT  RANK() OVER (ORDER BY SUM(oi.quantity) DESC) AS `rank`,
                 p.product_id AS productId,
                 p.product_name AS productName,
                 c.category_name AS categoryName,
-                SUM(pd.sales) AS soldQuantity,
-                SUM(pd.sales * p.price) AS revenue
+                COALESCE(SUM(oi.quantity), 0) AS soldQuantity,
+                COALESCE(SUM(oi.quantity * (p.price + pd.surcharge)), 0) AS revenue
         FROM product p JOIN
              product_detail pd ON p.product_id = pd.product_id JOIN
-             category c ON p.category_id = c.category_id
+             category c ON p.category_id = c.category_id JOIN
+             order_item oi ON pd.product_detail_id = oi.product_detail_id JOIN
+             order_status os ON oi.status_id = os.status_id
+        WHERE os.status_name <> '주문취소'
         GROUP BY p.product_id, p.product_name, c.category_name
         ORDER BY `rank`
     """, nativeQuery = true)
