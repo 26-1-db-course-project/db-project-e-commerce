@@ -22,7 +22,7 @@ import java.time.LocalDate;
 public class StatisticController {
     private final StatisticService statisticService;
 
-    @GetMapping
+    @GetMapping //기존 코드에서 프론트엔드 상황에 맞게 AI가 RequestParam 형태로 받는 방식으로 수정.
     public ResponseEntity<PeriodSalesListResponse> getSalesStats(
             @RequestParam(value = "period", defaultValue = "MONTHLY") PeriodType period,
             @RequestParam(value = "startDate", required = false)
